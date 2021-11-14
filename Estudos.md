@@ -46,13 +46,50 @@ Ferramentas de garantia de Qualidade de software
 
 - npm install --save-dev eslint
 
+ou instale globalmente 
+
 ### Configuração: 
 
 - ./node_modules/.bin/eslint --init
 
+Node: CommonJS 
+
+Caso tenha Js do lado do cliente pode-se ter uma isntalação de lint separada (dois projetos distintos)
+
+Problemas Jest x Lint :
+
+Adicione ch05\.eslintrc.js
+
+```
+module.exports = {
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true,
+        "jest": true, /// resolve os problemas de jest com variaveis globais não definidas
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+      "no-console": "off",
+    },
+};
+```
+
+### Execução : 
+
+npm run lint 
+
 ## Jest , Mocha, Jasmine, Ava, tape
 
-- Install as dev dependence 
+Install as dev dependence 
+
   - npm install --save-dev jest 
 
 ```
@@ -62,7 +99,8 @@ Ferramentas de garantia de Qualidade de software
   },
 ```
 
-- Modo Watch (hotreload) dos tests 
+Modo Watch (hotreload) dos tests 
+
   - npm test -- --watch 
 
 Alguns exemplos 
@@ -72,6 +110,7 @@ ch05\integration-tests\basic-navigation.test.js
 ch05\lib\__tests__\handlers.test.js
 
 ### Code Coverage 
+
   - npm test -- --coverage
 
 ## Testes de integração 
@@ -104,5 +143,4 @@ if(require.main === module) {
 beforeEach  : faz no inicio de cada teste 
 
 beforeAll: faz no inicio dos testes uma vez só (cuidado para um teste nao afetar o outro)
-
 

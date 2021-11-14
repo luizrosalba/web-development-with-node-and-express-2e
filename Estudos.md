@@ -16,7 +16,8 @@ ch02\02-helloworld.js
 Deve ser carregado pelo NODE (não serve automaticamente como nginx-apache...)
 
 
-# ch03
+# ch03 Rotas 
+
 A ordem das rotas no express é importante 
 Scaffolding= Boilerplate
 scaffolding do Node é o express-generator 
@@ -35,10 +36,7 @@ MVC
 
 app.use(express.static(__dirname + '/public')) // permite distribuir recursos estáticos como imagens css ou JS 
 
-# Ch05
-
-
-## Quality Assurance  (QA)
+# Ch05 Quality Assurance  (QA)
 
 Ferramentas de garantia de Qualidade de software 
 
@@ -85,6 +83,15 @@ module.exports = {
 ### Execução : 
 
 npm run lint 
+
+### Desativando um teste para uma linha 
+
+// Express recognizes the error handler by way of its four argumetns, so we have to disable ESLint's no-unused-vars rule
+
+/* eslint-disable no-unused-vars */
+exports.serverError = (err, req, res, next) => res.render('500')
+/* eslint-enable no-unused-vars */
+
 
 ## Jest , Mocha, Jasmine, Ava, tape
 
@@ -143,4 +150,84 @@ if(require.main === module) {
 beforeEach  : faz no inicio de cada teste 
 
 beforeAll: faz no inicio dos testes uma vez só (cuidado para um teste nao afetar o outro)
+
+## Integração Contínua
+
+Testes executados sempre que subimos um código 
+
+- Travis CI, github, CircleCI, 
+
+# Ch06 - Requisição e Resposta 
+
+Protocolo - nome host - porta - path - querystring - fragmento
+
+http:// - www.bing.com - :3000 - /search - ?q=grunt&first=9 - #q=express
+
+## querystring - string de pesquisa - pares nome/valor
+Devem ser codificados em URL encodeURIComponent (espaço vira +)
+
+## fragmento 
+Não é passado para o servidor, é de uso do navegador usado para controlar a aplicação ex: exibir uma parte do documento marcada por uma tag de ancora 
+
+ex: <a id="chapter06">
+
+## Rota para mostrar os headers das requisições 
+
+```
+app.get('/headers', (req, res) => {
+  res.type('text/plain')
+  const headers = Object.entries(req.headers)
+    .map(([key, value]) => `${key}: ${value}`)
+  res.send(headers.join('\n'))
+})
+```
+
+- Segurança : 
+
+Desativar o cabeçalho X-Powered-By para não revelar o 
+
+## Tipos de mídia 
+
+Content-type determina o tipo de conteudo servido 
+
+tipo - subtipo - parametros opcionais 
+
+text/html;charset=UTF-8
+
+## Corpo 
+
+GET não tem corpo e POST tem 
+
+application/x-www-for-urlencoded  ( formato semelhante a querystring)
+
+## Objeto de requisição 
+
+accepts determina se o cliente aceitará um tipo especcífico 
+
+secure retorna true se https
+
+req. params, query,body, route,cookies/req.signedCookies, headers, accepts(types) , ip, path, hostname, xhr, protocol,  secure , req.url/req.originalUrl
+
+## Objeto de resposta 
+
+Cookie requer middleware 
+
+end encerra a conexão sem enviar resposta 
+
+type define Content-Type 
+
+format : permite enviar diferentes conteudos dependendo de accept 
+
+
+req. status(code), set(name,value), cookie(name,value,[options]), clearCookie(name, [options]), redirect([status],url), send(body), json(json), jsonp(json), end, type(type), format (object), attachment([filename]), download(path,[filename],[callback ]) 
+sendFile(path, [options], [callback]), links(links), locals, render(view,[locals],callback)
+
+
+
+## Formulários : 
+
+Middleware de processamento 
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.urlenconded({extended: false}))
 
